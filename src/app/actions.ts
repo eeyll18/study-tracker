@@ -33,33 +33,59 @@ export async function addCourseAction(formData: FormData) {
   return { success: "Ders başarıyla eklendi." };
 }
 
-export async function logStudySessionAction(courseId: number, durationMinutes: number) {
-    const supabase =await createClient()
+export async function logStudySessionAction(
+  courseId: number,
+  durationMinutes: number
+) {
+  const supabase = await createClient();
 
-    const { data: { user } } = await supabase.auth.getUser()
-    if (!user) {
-        return { error: 'Giriş yapmalısınız.' }
-    }
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return { error: "Giriş yapmalısınız." };
+  }
 
-    if (durationMinutes <= 0) {
-        return { error: 'Süre 0\'dan büyük olmalıdır.' }
-    }
+  if (durationMinutes <= 0) {
+    return { error: "Süre 0'dan büyük olmalıdır." };
+  }
 
+  const { error } = await supabase.from("study_sessions").insert({
+    course_id: courseId,
+    user_id: user.id,
+    duration_minutes: durationMinutes,
+  });
 
-    const { error } = await supabase
-        .from('study_sessions')
-        .insert({
-            course_id: courseId,
-            user_id: user.id,
-            duration_minutes: durationMinutes,
-        })
-    
-    if (error) {
-        return { error: 'Veritabanı hatası: ' + error.message }
-    }
-    
-    revalidatePath('/dashboard')
-    return { success: 'Çalışma başarıyla kaydedildi!' }
+  if (error) {
+    return { error: "Veritabanı hatası: " + error.message };
+  }
+
+  revalidatePath("/dashboard");
+  return { success: "Çalışma başarıyla kaydedildi!" };
+}
+
+export async function deleteCourseAction(courseId: number) {
+  const supabase = await createClient();
+
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return { error: "Giriş yapmalısınız." };
+  }
+
+  const { error } = await supabase
+    .from("courses")
+    .delete()
+    .eq("id", courseId)
+    .eq("user_id", user.id);
+
+  if (error) {
+    return { error: "Ders silinirken bir hata oluştu: " + error.message };
+  }
+  
+  revalidatePath("/dashboard");
+  return { success: "Ders Silindi!" };
 }
 
 export async function signOutAction() {

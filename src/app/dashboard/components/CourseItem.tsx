@@ -4,7 +4,7 @@ import { useState, useEffect, useRef } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import type { Course } from "../page";
-import { logStudySessionAction } from "@/app/actions";
+import { deleteCourseAction, logStudySessionAction } from "@/app/actions";
 import { toast } from "sonner";
 
 function formatTime(seconds: number) {
@@ -22,6 +22,7 @@ export default function CourseItem({ course }: { course: Course }) {
   const [isActive, setIsActive] = useState(false);
   const [time, setTime] = useState(0);
   const [isSaving, setIsSaving] = useState(false);
+  const [isDeleting, setIsDeleting] = useState(false);
   const intervalRef = useRef<NodeJS.Timeout | null>(null);
 
   useEffect(() => {
@@ -78,6 +79,31 @@ export default function CourseItem({ course }: { course: Course }) {
     setTime(0);
   };
 
+  const handleDelete = async () => {
+    if (
+      !confirm(
+        `"${course.name}" dersini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.`
+      )
+    ) {
+      return;
+    }
+    setIsDeleting(true);
+
+    const promise = deleteCourseAction(course.id);
+
+    toast.promise(promise, {
+      loading: "Ders siliniyor...",
+      success: (data) => {
+        if (data.error) {
+          throw new Error(data.error);
+        }
+        return "Ders başarıyla silindi!";
+      },
+      error: (error) => `Hata:${error.message}`,
+      finally: () => setIsDeleting(false),
+    });
+  };
+
   return (
     <Card className="p-4 flex justify-between items-center">
       <div className="flex-grow">
@@ -111,6 +137,14 @@ export default function CourseItem({ course }: { course: Course }) {
           disabled={isSaving}
         >
           Sıfırla
+        </Button>
+        <Button
+          onClick={handleDelete}
+          size="sm"
+          disabled={isSaving}
+          className="bg-red-600 hover:bg-red-700"
+        >
+          {isDeleting ? "Siliniyor" : "Sil"}
         </Button>
       </div>
     </Card>
