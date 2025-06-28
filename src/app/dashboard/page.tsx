@@ -10,6 +10,11 @@ export type Course = {
   name: string;
 };
 
+export type DailySummary = {
+  course_name: string;
+  total_minutes: number;
+};
+
 export default async function Dashboard() {
   const supabase = await createClient();
 
@@ -30,6 +35,11 @@ export default async function Dashboard() {
     .select("*, courses(name)")
     .order("created_at", { ascending: false })
     .limit(5);
+
+  const { data, error: summaryError } = await supabase.rpc("get_daily_summary");
+
+  const dailySummary = data as DailySummary[] | null;
+
 
   return (
     <div className="space-y-8">
@@ -61,22 +71,22 @@ export default async function Dashboard() {
           </CardContent>
         </Card>
 
-        <Card>
+        {/* <Card>
           <CardHeader>
             <CardTitle>Son Çalışmalar</CardTitle>
           </CardHeader>
           <CardContent>
-            {sessions && sessions.length > 0 ? (
+            {dailySummary && dailySummary.length > 0 ? (
               <ul className="space-y-2">
-                {sessions.map((session) => (
+                {dailySummary.map((summary) => (
                   <li
-                    key={session.id}
+                    key={summary.course_name}
                     className="text-sm text-gray-600 dark:text-gray-300"
                   >
                     <span className="font-semibold">
-                      {session.courses?.name}
+                      {summary.course_name}
                     </span>
-                    : {session.duration_minutes} dakika
+                    : {summary.total_minutes} dakika
                   </li>
                 ))}
               </ul>
@@ -86,7 +96,38 @@ export default async function Dashboard() {
               </p>
             )}
           </CardContent>
-        </Card>
+        </Card> */}
+
+        <div className="space-y-8">
+          <Card>
+            <CardHeader>
+              <CardTitle>Bugünkü Toplam Süre</CardTitle>
+            </CardHeader>
+            <CardContent>
+              {dailySummary && dailySummary.length > 0 ? (
+                <ul className="space-y-3">
+                  {dailySummary.map((summary) => (
+                    <li
+                      key={summary.course_name}
+                      className="flex justify-between items-center text-sm font-medium"
+                    >
+                      <span className="text-gray-800 dark:text-gray-200">
+                        {summary.course_name}
+                      </span>
+                      <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-md dark:bg-blue-900 dark:text-blue-200">
+                        {summary.total_minutes} dakika
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              ) : (
+                <p className="text-gray-500 dark:text-gray-400">
+                  Bugün hiç çalışmadınız.
+                </p>
+              )}
+            </CardContent>
+          </Card>
+        </div>
       </div>
     </div>
   );
