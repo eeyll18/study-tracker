@@ -38,7 +38,6 @@ export async function logStudySessionAction(courseId: number, durationMinutes: n
 
     const { data: { user } } = await supabase.auth.getUser()
     if (!user) {
-        console.error("Hata: Oturum bulunamadı. Kullanıcı giriş yapmamış.");
         return { error: 'Giriş yapmalısınız.' }
     }
 
@@ -46,7 +45,6 @@ export async function logStudySessionAction(courseId: number, durationMinutes: n
         return { error: 'Süre 0\'dan büyük olmalıdır.' }
     }
 
-    console.log(`Sunucu: user ${user.id} için ${courseId} nolu derse ${durationMinutes}dk ekleniyor.`);
 
     const { error } = await supabase
         .from('study_sessions')
@@ -57,7 +55,6 @@ export async function logStudySessionAction(courseId: number, durationMinutes: n
         })
     
     if (error) {
-        console.error('Supabase ekleme hatası:', error.message);
         return { error: 'Veritabanı hatası: ' + error.message }
     }
     
