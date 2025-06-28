@@ -108,7 +108,7 @@ export default function CourseItem({ course }: { course: Course }) {
           onClick={handleReset}
           size="sm"
           variant="outline"
-          disabled={isActive || isSaving}
+          disabled={isSaving}
         >
           Sıfırla
         </Button>
