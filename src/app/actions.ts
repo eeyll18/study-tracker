@@ -83,9 +83,42 @@ export async function deleteCourseAction(courseId: number) {
   if (error) {
     return { error: "Ders silinirken bir hata oluştu: " + error.message };
   }
-  
+
   revalidatePath("/dashboard");
   return { success: "Ders Silindi!" };
+}
+
+export async function setGoalAction(formData: FormData) {
+  const supabase = await createClient();
+  const {
+    data: { user },
+  } = await supabase.auth.getUser();
+  if (!user) {
+    return { error: "Giriş yapmalısınız." };
+  }
+
+  const type = formData.get("type") as "daily" | "weekly";
+  const target_minutes = Number(formData.get("target_minutes"));
+
+  if (!type || !["daily", "weekly"].includes(type)) {
+    return { error: "Geçersiz hedef türü." };
+  }
+  if (isNaN(target_minutes) || target_minutes < 0) {
+    return { error: "Hedef dakika geçerli bir sayı olmalıdır." };
+  }
+
+  const { error } = await supabase
+    .from("goals")
+    .upsert(
+      { user_id: user.id, type, target_minutes },
+      { onConflict: "user_id,type" }
+    );
+
+  if (error) {
+    return { error: "Hedef ayarlanırken bir hata oluştu." };
+  }
+  revalidatePath("/dashboard");
+  return { success: "Hedef başarıyla güncellendi!" };
 }
 
 export async function signOutAction() {

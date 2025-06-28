@@ -6,12 +6,12 @@ import { Label } from "@/components/ui/label";
 import { createClient } from "@/lib/supabase/client";
 import React, { useState } from "react";
 
-export default function AuthForm() {
+export default async function AuthForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState<string | null>(null);
   const [message, setMessage] = useState<string | null>(null);
-  const supabase = createClient();
+  const supabase = await createClient();
 
   const handleSignUp = async (e: React.FormEvent) => {
     e.preventDefault();
