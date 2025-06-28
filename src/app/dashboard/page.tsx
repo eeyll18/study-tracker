@@ -4,6 +4,7 @@ import { redirect } from "next/navigation";
 import AddCourse from "./components/AddCourse";
 import CourseItem from "./components/CourseItem";
 import SignOutButton from "./components/SignOutButton";
+import StatsChart from "./components/StatsChart";
 
 export type Course = {
   id: number;
@@ -40,6 +41,11 @@ export default async function Dashboard() {
 
   const dailySummary = data as DailySummary[] | null;
 
+  const { data: statsData, error: statsError } = await supabase.rpc(
+    "get_user_study_stats"
+  );
+  console.log(statsData);
+  console.log(statsError);
 
   return (
     <div className="space-y-8">
@@ -98,6 +104,9 @@ export default async function Dashboard() {
           </CardContent>
         </Card> */}
 
+        <div>
+          <StatsChart data={statsData || []} />
+        </div>
         <div className="space-y-8">
           <Card>
             <CardHeader>
