@@ -8,6 +8,7 @@ import {
   DialogTrigger,
   DialogFooter,
   DialogClose,
+  DialogDescription,
 } from "@/components/ui/dialog";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -25,6 +26,9 @@ export default function AddCourse() {
       <DialogContent className="sm:max-w-[425px]">
         <DialogHeader>
           <DialogTitle>Yeni Ders Ekle</DialogTitle>
+          <DialogDescription>
+            Takip etmek istediğiniz yeni dersin adını girin.
+          </DialogDescription>
         </DialogHeader>
         <form
           ref={formRef}
