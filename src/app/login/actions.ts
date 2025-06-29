@@ -1,5 +1,4 @@
-"use server"
-
+'use server'
 
 import { createClient } from '@/lib/supabase/server'
 import { headers } from 'next/headers'
@@ -16,14 +15,17 @@ export async function login(formData: FormData) {
   })
 
   if (error) {
-    return redirect('/login?message=Giriş bilgileri hatalı. Lütfen tekrar deneyin.')
+    const message = encodeURIComponent('Giriş bilgileri hatalı. Lütfen tekrar deneyin.');
+    return redirect(`/login?message=${message}`);
   }
 
   return redirect('/dashboard')
 }
 
 export async function signup(formData: FormData) {
-  const origin = (await headers()).get('origin')
+  const headersList = await headers()
+  const origin = headersList.get('origin')
+
   const email = formData.get('email') as string
   const password = formData.get('password') as string
   const supabase = await createClient()
@@ -37,8 +39,10 @@ export async function signup(formData: FormData) {
   })
 
   if (error) {
-    return redirect('/login?message=Kayıt işlemi sırasında bir hata oluştu. Lütfen başka bir e-posta deneyin.')
+    const message = encodeURIComponent('Kayıt işlemi sırasında bir hata oluştu. Lütfen başka bir e-posta deneyin.');
+    return redirect(`/login?message=${message}`);
   }
 
-  return redirect('/login?message=Kayıt başarılı! Lütfen e-postanızı kontrol ederek hesabınızı doğrulayın.')
+  const message = encodeURIComponent('Kayıt başarılı! Lütfen e-postanızı kontrol ederek hesabınızı doğrulayın.');
+  return redirect(`/login?message=${message}`);
 }
