@@ -7,6 +7,7 @@ import SignOutButton from "./components/SignOutButton";
 import StatsChart from "./components/StatsChart";
 import GoalCard from "./components/GoalCard";
 import type { SupabaseClient } from "@supabase/supabase-js";
+import { ThemeToggle } from "../components/theme-toggle";
 
 export type Course = {
   id: number;
@@ -120,7 +121,7 @@ const DailySummaryCard = ({
               <span className="text-gray-800 dark:text-gray-200">
                 {summary.course_name}
               </span>
-              <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-md dark:bg-blue-900 dark:text-blue-200">
+              <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-md dark:bg-blue-900 dark:text-white">
                 {summary.total_minutes} dakika
               </span>
             </li>
@@ -162,7 +163,10 @@ export default async function Dashboard() {
         <h1 className="text-2xl md:text-3xl font-bold text-gray-900 dark:text-white">
           Hoş Geldin, {user.email?.split("@")[0]}!
         </h1>
-        <SignOutButton />
+        <div className="flex items-center gap-4">
+          <ThemeToggle />
+          <SignOutButton />
+        </div>
       </header>
 
       <section className="grid gap-4 md:grid-cols-2">

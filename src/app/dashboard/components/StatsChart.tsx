@@ -11,6 +11,7 @@ import {
   CartesianGrid,
 } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { useTheme } from "next-themes";
 
 interface ChartData {
   course_name: string;
@@ -22,6 +23,14 @@ interface StatsChartProps {
 }
 
 export default function StatsChart({ data }: StatsChartProps) {
+  const { resolvedTheme } = useTheme();
+
+  const tickColor = resolvedTheme === "dark" ? "#d1d5db" : "#374151";
+  const strokeColor = resolvedTheme === "dark" ? "#4b5563" : "#e5e7eb";
+  const tooltipBackgroundColor =
+    resolvedTheme === "dark" ? "#1f2937" : "#ffffff";
+  const tooltipBorderColor = resolvedTheme === "dark" ? "#374151" : "#ccc";
+
   if (!data || data.length === 0) {
     return (
       <Card>
@@ -29,8 +38,8 @@ export default function StatsChart({ data }: StatsChartProps) {
           <CardTitle>Ders İstatistikleri</CardTitle>
         </CardHeader>
         <CardContent>
-          <div className="flex items-center justify-between h-60">
-            <p className="text-gray-500">
+          <div className="flex items-center justify-center h-[300px]">
+            <p className="text-muted-foreground">
               Grafiği görmek için önce biraz ders çalışın!
             </p>
           </div>
@@ -45,33 +54,42 @@ export default function StatsChart({ data }: StatsChartProps) {
         <CardTitle>Ders İstatistikleri</CardTitle>
       </CardHeader>
       <CardContent>
-        <div style={{ width: "%100", height: 300 }}>
+        <div style={{ width: "100%", height: 300 }}>
           <ResponsiveContainer>
             <BarChart
               data={data}
               margin={{
                 top: 5,
                 right: 20,
-                left: 10,
+                left: -10,
                 bottom: 5,
               }}
             >
-              <CartesianGrid strokeDasharray="3 3" />
-              <XAxis dataKey="course_name" />
-              <YAxis />
+              <CartesianGrid strokeDasharray="3 3" stroke={strokeColor} />
+              <XAxis
+                dataKey="course_name"
+                tick={{ fill: tickColor }}
+                tickLine={{ stroke: tickColor }}
+              />
+              <YAxis
+                tick={{ fill: tickColor }}
+                tickLine={{ stroke: tickColor }}
+              />
               <Tooltip
-                cursor={{ fill: "rgba(206,212,218,0.3" }}
+                cursor={{ fill: "rgba(100, 116, 139, 0.3)" }}
                 contentStyle={{
-                  backgroundColor: "white",
-                  border: "1px solid #ccc",
+                  backgroundColor: tooltipBackgroundColor,
+                  border: `1px solid ${tooltipBorderColor}`,
                   borderRadius: "0.5rem",
+                  color: tickColor,
                 }}
               />
-              <Legend />
+              <Legend wrapperStyle={{ color: tickColor }} />
               <Bar
                 dataKey="total_minutes"
                 fill="#0077b6"
                 name="Toplam Çalışma (dk)"
+                radius={[4, 4, 0, 0]}
                 maxBarSize={50}
               />
             </BarChart>

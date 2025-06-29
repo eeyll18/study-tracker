@@ -115,7 +115,7 @@ export default function CourseItem({ course }: { course: Course }) {
           <Button
             onClick={handleStart}
             size="sm"
-            className="bg-green-600 hover:bg-green-700"
+            className="bg-green-600 hover:bg-green-700 dark:text-white"
             disabled={isSaving}
           >
             Başlat
@@ -142,7 +142,7 @@ export default function CourseItem({ course }: { course: Course }) {
           onClick={handleDelete}
           size="sm"
           disabled={isSaving}
-          className="bg-red-600 hover:bg-red-700"
+          className="bg-red-600 hover:bg-red-700 dark:text-white"
         >
           {isDeleting ? "Siliniyor" : "Sil"}
         </Button>
