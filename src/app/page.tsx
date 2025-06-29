@@ -9,6 +9,8 @@ export default async function Home() {
 
   if (session) {
     redirect("/dashboard");
+  }else {
+    redirect("/login");
   }
 
   return (
@@ -20,7 +22,6 @@ export default async function Home() {
         <p className="text-center text-gray-600 dark:text-gray-300">
           Giriş yapın veya yeni bir hesap oluşturun.
         </p>
-        <AuthForm />
       </div>
     </div>
   );
