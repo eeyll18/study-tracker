@@ -2,10 +2,11 @@
 
 Öğrenciler ve kendi kendine öğrenenler için geliştirilmiş modern bir ders çalışma takibi uygulamasıdır. Bu platform, kullanıcıların çalışma sürelerini verimli bir şekilde yönetmelerine, hedefler belirlemelerine ve ilerlemelerini görsel olarak takip etmelerine olanak tanır.
 
-<!-- **[Canlı Demoyu Görüntüle](https://PROJENIN-VERCEL-LINKI.vercel.app)**  *(Buraya Vercel linkini eklemeyi unutma)*
+<!-- **[Canlı Demoyu Görüntüle](https://PROJENIN-VERCEL-LINKI.vercel.app)**  *(Buraya Vercel linkini eklemeyi unutma)*-->
 
-![Uygulama Ekran Görüntüsü](https://via.placeholder.com/800x450.png?text=Uygulamanın+Ekran+Görüntüsü)
-*(Projenin bir ekran görüntüsünü alıp buraya eklemen çok etkili olur)* -->
+
+(./assests/study-tracker.png)
+
 
 ---
 
