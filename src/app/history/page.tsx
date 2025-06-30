@@ -1,11 +1,8 @@
 import { createClient } from "@/lib/supabase/server";
 import { redirect } from "next/navigation";
-import { Card, CardHeader, CardTitle, CardContent } from "@/components/ui/card";
-import WeekNavigator from "./components/WeekNavigator";
 import { Suspense } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import StatsChart from "../dashboard/components/StatsChart";
 import ViewSwitcher from "./components/ViewSwitcher";
 import WeeklyHistory from './components/WeeklyHistory'
 import DailyHistory from "./components/DailyHistory";
