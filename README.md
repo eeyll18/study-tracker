@@ -4,7 +4,7 @@
 
 <!-- **[Canlı Demoyu Görüntüle](https://PROJENIN-VERCEL-LINKI.vercel.app)**  *(Buraya Vercel linkini eklemeyi unutma)*-->
 
-![Uygulamamın Ekran Görüntüsü](./assets/study-tracker.png)
+![Uygulamamın Ekran Görüntüsü](./assests/study-tracker.png)
 
 
 ---
