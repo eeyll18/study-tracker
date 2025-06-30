@@ -1,36 +1,63 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Ders Çalışma Takibi Uygulaması
 
-## Getting Started
+Öğrenciler ve kendi kendine öğrenenler için geliştirilmiş modern bir ders çalışma takibi uygulamasıdır. Bu platform, kullanıcıların çalışma sürelerini verimli bir şekilde yönetmelerine, hedefler belirlemelerine ve ilerlemelerini görsel olarak takip etmelerine olanak tanır.
 
-First, run the development server:
+<!-- **[Canlı Demoyu Görüntüle](https://PROJENIN-VERCEL-LINKI.vercel.app)**  *(Buraya Vercel linkini eklemeyi unutma)*
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+![Uygulama Ekran Görüntüsü](https://via.placeholder.com/800x450.png?text=Uygulamanın+Ekran+Görüntüsü)
+*(Projenin bir ekran görüntüsünü alıp buraya eklemen çok etkili olur)* -->
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+---
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ✨ Özellikler
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+- **🔐 Kullanıcı Yönetimi:** Supabase Auth ile güvenli e-posta/şifre tabanlı kayıt ve giriş sistemi.
+- **📚 Ders Yönetimi:** Çalışılacak dersleri kolayca **Ekleme ve Silme**.
+- **⏱️ Akıllı Zamanlayıcı:** Her ders için ayrı ayrı çalıştırılabilen kronometre ile net çalışma süresi takibi.
+- **🎯 Hedef Belirleme:** Kullanıcıların kendilerine **günlük ve haftalık çalışma hedefleri** koyarak motivasyonlarını artırması.
+- **📊 İstatistik ve Raporlama:** **Detaylı grafikler (Recharts/Chart.js)** ile hangi derse ne kadar çalışıldığını görsel olarak analiz etme ve ilerleme takibi.
+- **🔒 Güvenli ve Kişisel:** Supabase Row Level Security (RLS) sayesinde her kullanıcının verileri tamamen kendine özel ve güvendedir.
 
-## Learn More
+---
 
-To learn more about Next.js, take a look at the following resources:
+## 🛠️ Teknoloji Yığını
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+- **Framework:** **Next.js** 
+- **Dil:** **TypeScript**
+- **Backend & Veritabanı:** **Supabase** (PostgreSQL, Auth, RLS)
+- **Styling:** **Tailwind CSS**
+- **UI Bileşenleri:** **shadcn/ui**
+- **Grafikler:** **Recharts** 
+<!-- - **Deployment:** **Vercel** -->
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+---
 
-## Deploy on Vercel
+## 🚀 Projeyi Yerel Makinede Çalıştırma
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+Projeyi kendi bilgisayarınızda kurmak ve çalıştırmak için aşağıdaki adımları izleyin.
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+1.  **Repository'yi Klonlayın:**
+    ```bash
+    git clone https://github.com/eeyll18/study-tracker.git
+    ```
+
+2.  **Gerekli Paketleri Yükleyin:**
+    ```bash
+    npm install
+    ```
+
+3.  **Environment Değişkenlerini Ayarlayın:**
+    Projenin ana dizininde `.env.local` adında bir dosya oluşturun ve Supabase projenizin bilgilerini içine ekleyin.
+
+    ```.env.local
+    NEXT_PUBLIC_SUPABASE_URL
+    NEXT_PUBLIC_SUPABASE_ANON_KEY
+    ```
+
+4.  **Geliştirme Sunucusunu Başlatın:**
+    ```bash
+    npm run dev
+    ```
+
+
+---
