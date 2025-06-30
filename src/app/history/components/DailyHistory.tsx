@@ -87,7 +87,7 @@ export default async function DailyHistory({
                       })}
                     </p>
                   </div>
-                  <span className="px-2 py-1 bg-green-100 text-blue-800 rounded-md dark:bg-blue-900 dark:text-white">
+                  <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-md dark:bg-blue-900 dark:text-white">
                     {item.duration_minutes} dakika
                   </span>
                 </li>
