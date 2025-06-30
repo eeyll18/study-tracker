@@ -2,11 +2,8 @@ import { createClient } from "@/lib/supabase/server";
 import WeekNavigator from "./WeekNavigator";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import StatsChart from "@/app/dashboard/components/StatsChart";
+import type { Stat } from "@/app/dashboard/page";
 
-type HistoryStat = {
-  course_name: string;
-  total_minutes: number;
-};
 
 const getMonday = (date: Date) => {
   const d = new Date(
@@ -38,7 +35,7 @@ export default async function HistoryContent({ weekStartParam }: { weekStartPara
     }
   );
 
-  const weeklySummary = summary as HistoryStat[] | null;
+  const weeklySummary = summary as Stat[] | null;
   const totalMinutes =
     weeklySummary?.reduce((sum, s) => sum + s.total_minutes, 0) || 0;
 
