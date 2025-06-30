@@ -8,6 +8,8 @@ import StatsChart from "./components/StatsChart";
 import GoalCard from "./components/GoalCard";
 import type { SupabaseClient } from "@supabase/supabase-js";
 import { ThemeToggle } from "../components/theme-toggle";
+import { Button } from "@/components/ui/button";
+import Link from "next/link";
 
 export type Course = {
   id: number;
@@ -165,6 +167,9 @@ export default async function Dashboard() {
         </h1>
         <div className="flex items-center gap-4">
           <ThemeToggle />
+          <Button asChild variant="outline">
+            <Link href="/history">Geçmişi Görüntüle</Link>
+          </Button>
           <SignOutButton />
         </div>
       </header>
