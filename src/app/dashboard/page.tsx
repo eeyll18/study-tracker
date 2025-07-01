@@ -103,40 +103,6 @@ const CourseListCard = ({ courses }: { courses: Course[] | null }) => (
   </Card>
 );
 
-const DailySummaryCard = ({
-  dailySummary,
-}: {
-  dailySummary: Stat[] | null;
-}) => (
-  <Card>
-    <CardHeader>
-      <CardTitle>Bugünkü Toplam Süre</CardTitle>
-    </CardHeader>
-    <CardContent>
-      {dailySummary && dailySummary.length > 0 ? (
-        <ul className="space-y-3">
-          {dailySummary.map((summary) => (
-            <li
-              key={summary.course_name}
-              className="flex justify-between items-center text-sm font-medium"
-            >
-              <span className="text-gray-800 dark:text-gray-200">
-                {summary.course_name}
-              </span>
-              <span className="px-2 py-1 bg-blue-100 text-blue-800 rounded-md dark:bg-blue-900 dark:text-white">
-                {summary.total_minutes} dakika
-              </span>
-            </li>
-          ))}
-        </ul>
-      ) : (
-        <p className="text-gray-500 dark:text-gray-400">
-          Bugün hiç çalışmadınız.
-        </p>
-      )}
-    </CardContent>
-  </Card>
-);
 
 export default async function Dashboard() {
   const supabase = await createClient();
@@ -196,9 +162,6 @@ export default async function Dashboard() {
 
         <div className="space-y-8">
           <StatsChart data={dailySummary || []} />
-        </div>
-        <div className="space-y-8">
-          <DailySummaryCard dailySummary={dailySummary} />
         </div>
       </main>
     </div>
