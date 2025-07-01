@@ -95,7 +95,6 @@ export default function CourseItem({ course }: { course: Course }) {
         </Badge>
       </div>
       
-      {/* Sadece ilgili propları alan alt bileşenler */}
       <TimerDisplay timeLeft={timeLeft} pomodorosCompleted={pomodorosCompleted} />
       
       <PomodoroControls
