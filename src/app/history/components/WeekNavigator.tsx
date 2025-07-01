@@ -3,7 +3,6 @@
 import { Button } from "@/components/ui/button";
 import { useRouter, useSearchParams } from "next/navigation";
 import { ChevronLeft, ChevronRight } from "lucide-react";
-import { useEffect } from "react";
 
 const formatDate = (date: Date) => date.toISOString().split("T")[0];
 

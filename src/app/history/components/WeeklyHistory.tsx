@@ -27,7 +27,7 @@ export default async function HistoryContent({ weekStartParam }: { weekStartPara
   const supabase = await createClient();
   const { startOfWeek, endOfWeek } = getWeekRange(weekStartParam);
 
-  const { data: summary, error } = await supabase.rpc(
+  const { data: summary } = await supabase.rpc(
     "get_study_summary_for_period",
     {
       start_date: startOfWeek.toISOString(),

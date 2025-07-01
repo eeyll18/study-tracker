@@ -99,7 +99,7 @@ export default function GoalCard({
           {progress}/{target} dk
         </div>
         <p className="text-xs text-muted-foreground">
-          Hedefin %{Math.round(progressPercentage)}'ını tamamladın.
+          Hedefin %{Math.round(progressPercentage)}ını tamamladın.
         </p>
         <div className="w-full bg-gray-200 rounded-full h-2.5 dark:bg-gray-700 mt-4">
           <div
