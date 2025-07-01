@@ -1,152 +1,111 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
+import { Badge } from "@/components/ui/badge";
 import type { Course } from "../page";
 import { deleteCourseAction, logStudySessionAction } from "@/app/actions";
 import { toast } from "sonner";
+import { usePomodoro } from "@/hooks/usePomodoro";
 
-function formatTime(seconds: number) {
-  const h = Math.floor(seconds / 3600)
-    .toString()
-    .padStart(2, "0");
-  const m = Math.floor((seconds % 3600) / 60)
+
+function formatPomodoroTime(seconds: number) {
+  const m = Math.floor(seconds / 60)
     .toString()
     .padStart(2, "0");
   const s = (seconds % 60).toString().padStart(2, "0");
-  return `${h}:${m}:${s}`;
+  return `${m}:${s}`;
 }
 
+type PomodoroMode = "work" | "shortBreak" | "longBreak";
+
+const modeDetails: Record<PomodoroMode, { text: string; color: string }> = {
+  work: { text: "Çalışma", color: "bg-red-500" },
+  shortBreak: { text: "Kısa Mola", color: "bg-green-500" },
+  longBreak: { text: "Uzun Mola", color: "bg-blue-500" },
+};
+
+const TimerDisplay = React.memo(({ timeLeft, pomodorosCompleted }: { timeLeft: number; pomodorosCompleted: number }) => {
+  console.log("TimerDisplay Rendered"); 
+  return (
+    <div className='text-center'>
+      <p className="text-6xl font-mono tracking-wider">{formatPomodoroTime(timeLeft)}</p>
+      <p className='text-sm text-gray-500 mt-1'>Tamamlanan Pomodoro: {pomodorosCompleted}</p>
+    </div>
+  );
+});
+TimerDisplay.displayName = 'TimerDisplay';
+
+const PomodoroControls = React.memo(({ isActive, isDeleting, onToggle, onSkip, onReset, onDelete }: {
+  isActive: boolean;
+  isDeleting: boolean;
+  onToggle: () => void;
+  onSkip: () => void;
+  onReset: () => void;
+  onDelete: () => void;
+}) => {
+  console.log("PomodoroControls Rendered");
+  return (
+    <div className="flex flex-wrap justify-center gap-2">
+      <Button onClick={onToggle} size="sm" className="w-24 bg-green-600 hover:bg-green-700 dark:text-white" disabled={isDeleting}>
+        {isActive ? 'Duraklat' : 'Başlat'}
+      </Button>
+      <Button onClick={onSkip} size="sm" variant="outline" disabled={isDeleting}>Geç</Button>
+      <Button onClick={onReset} size="sm" variant="outline" disabled={isDeleting}>Sıfırla</Button>
+      <Button onClick={onDelete} size="sm" variant="destructive" disabled={isDeleting}>
+        {isDeleting ? "Siliniyor..." : "Dersi Sil"}
+      </Button>
+    </div>
+  );
+});
+PomodoroControls.displayName = 'PomodoroControls';
+
 export default function CourseItem({ course }: { course: Course }) {
-  const [isActive, setIsActive] = useState(false);
-  const [time, setTime] = useState(0);
-  const [isSaving, setIsSaving] = useState(false);
+  const {
+    timeLeft,
+    mode,
+    pomodorosCompleted,
+    isActive,
+    handleToggle,
+    handleReset,
+    handleSkip,
+  } = usePomodoro({ courseId: course.id, courseName: course.name });
+
   const [isDeleting, setIsDeleting] = useState(false);
-  const intervalRef = useRef<NodeJS.Timeout | null>(null);
-
-  useEffect(() => {
-    if (isActive) {
-      intervalRef.current = setInterval(() => {
-        setTime((prevTime) => prevTime + 1);
-      }, 1000);
-    } else if (intervalRef.current) {
-      clearInterval(intervalRef.current);
-    }
-    return () => {
-      if (intervalRef.current) clearInterval(intervalRef.current);
-    };
-  }, [isActive]);
-
-  const handleStart = () => {
-    setIsActive(true);
-  };
-
-  const handleStop = async () => {
-    setIsActive(false);
-    setIsSaving(true);
-
-    const durationMinutes = Math.floor(time / 60);
-
-    if (durationMinutes > 0) {
-      const promise = logStudySessionAction(course.id, durationMinutes);
-
-      toast.promise(promise, {
-        loading: "Çalışma kaydediliyor...",
-        success: (data) => {
-          if (data.error) {
-            throw new Error(data.error);
-          }
-          setTime(0);
-          return "Çalışma başarıyla kaydedildi!";
-        },
-        error: (error) => `Hata: ${error.message}`,
-        finally: () => setIsSaving(false),
-      });
-    } else {
-      toast.warning("Süre 1 dakikadan az olduğu için kaydedilmedi.", {
-        description: `Sadece ${time} saniye çalıştınız. Kayıt için en az 1 dakika gereklidir.`,
-      });
-      setTime(0);
-      setIsSaving(false);
-    }
-
-    setIsSaving(false);
-  };
-
-  const handleReset = () => {
-    setIsActive(false);
-    setTime(0);
-  };
 
   const handleDelete = async () => {
-    if (
-      !confirm(
-        `"${course.name}" dersini silmek istediğinizden emin misiniz? Bu işlem geri alınamaz.`
-      )
-    ) {
-      return;
-    }
+    if (!confirm(`"${course.name}" dersini silmek istediğinizden emin misiniz?`)) return;
     setIsDeleting(true);
-
     const promise = deleteCourseAction(course.id);
-
     toast.promise(promise, {
       loading: "Ders siliniyor...",
-      success: (data) => {
-        if (data.error) {
-          throw new Error(data.error);
-        }
-        return "Ders başarıyla silindi!";
-      },
-      error: (error) => `Hata:${error.message}`,
+      success: "Ders başarıyla silindi!",
+      error: (err) => `Hata: ${err.message}`,
       finally: () => setIsDeleting(false),
     });
   };
 
   return (
-    <Card className="p-4 flex justify-between items-center">
-      <div className="flex-grow">
+    <Card className="p-4 flex flex-col gap-4">
+      <div className='flex justify-between items-start'>
         <p className="font-semibold text-lg">{course.name}</p>
-        <p className="text-2xl font-mono tracking-wider">{formatTime(time)}</p>
+        <Badge className={`${modeDetails[mode].color} text-white`}>
+            {modeDetails[mode].text}
+        </Badge>
       </div>
-      <div className="flex space-x-2">
-        {!isActive ? (
-          <Button
-            onClick={handleStart}
-            size="sm"
-            className="bg-green-600 hover:bg-green-700 dark:text-white"
-            disabled={isSaving}
-          >
-            Başlat
-          </Button>
-        ) : (
-          <Button
-            onClick={handleStop}
-            size="sm"
-            variant="destructive"
-            disabled={isSaving}
-          >
-            {isSaving ? "Kaydediliyor..." : "Durdur & Kaydet"}
-          </Button>
-        )}
-        <Button
-          onClick={handleReset}
-          size="sm"
-          variant="outline"
-          disabled={isSaving}
-        >
-          Sıfırla
-        </Button>
-        <Button
-          onClick={handleDelete}
-          size="sm"
-          disabled={isSaving}
-          className="bg-red-600 hover:bg-red-700 dark:text-white"
-        >
-          {isDeleting ? "Siliniyor" : "Sil"}
-        </Button>
-      </div>
+      
+      {/* Sadece ilgili propları alan alt bileşenler */}
+      <TimerDisplay timeLeft={timeLeft} pomodorosCompleted={pomodorosCompleted} />
+      
+      <PomodoroControls
+        isActive={isActive}
+        isDeleting={isDeleting}
+        onToggle={handleToggle}
+        onSkip={handleSkip}
+        onReset={handleReset}
+        onDelete={handleDelete}
+      />
     </Card>
   );
 }
