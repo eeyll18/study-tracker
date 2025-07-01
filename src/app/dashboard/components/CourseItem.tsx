@@ -1,11 +1,11 @@
 "use client";
 
-import React, { useState, useEffect, useCallback } from "react";
+import React, { useState, } from "react";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import type { Course } from "../page";
-import { deleteCourseAction, logStudySessionAction } from "@/app/actions";
+import { deleteCourseAction } from "@/app/actions";
 import { toast } from "sonner";
 import { usePomodoro } from "@/hooks/usePomodoro";
 
