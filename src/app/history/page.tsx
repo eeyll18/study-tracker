@@ -8,6 +8,7 @@ import WeeklyHistory from "./components/WeeklyHistory";
 import DailyHistory from "./components/DailyHistory";
 
 type HistoryPageProps = {
+  params: {};
   searchParams: { [key: string]: string | string[] | undefined };
 };
 
