@@ -4,15 +4,14 @@ import { Suspense } from "react";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import ViewSwitcher from "./components/ViewSwitcher";
-import WeeklyHistory from './components/WeeklyHistory'
+import WeeklyHistory from "./components/WeeklyHistory";
 import DailyHistory from "./components/DailyHistory";
 
+type HistoryPageProps = {
+  searchParams: { [key: string]: string | string[] | undefined };
+};
 
-export default async function HistoryPage({
-  searchParams,
-}: {
-  searchParams?: { [key: string]: string | undefined };
-}) {
+export default async function HistoryPage({ searchParams }: HistoryPageProps) {
   const supabase = await createClient();
   const {
     data: { user },
@@ -22,9 +21,16 @@ export default async function HistoryPage({
     redirect("/");
   }
 
-  const view = searchParams?.view || "weekly";
-  const weekStart = searchParams?.week_start;
-  const date = searchParams?.date;
+  const viewParam = searchParams?.view;
+  const view = Array.isArray(viewParam) ? viewParam[0] : viewParam || "weekly";
+
+  const weekStartParam = searchParams?.week_start;
+  const weekStart = Array.isArray(weekStartParam)
+    ? weekStartParam[0]
+    : weekStartParam;
+
+  const dateParam = searchParams?.date;
+  const date = Array.isArray(dateParam) ? dateParam[0] : dateParam;
 
   return (
     <div className="space-y-8 p-4 md:p-8">
