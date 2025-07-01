@@ -4,7 +4,7 @@ import { logStudySessionAction } from "@/app/actions";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { toast } from "sonner";
 
-const WORK_DURATION = 1 * 60;
+const WORK_DURATION = 25 * 60;
 const SHORT_BREAK_DURATION = 5 * 60;
 const LONG_BREAK_DURATION = 15 * 60;
 const CYCLES_BEFORE_LONG_BREAK = 4;
